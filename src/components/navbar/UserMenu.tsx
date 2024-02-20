@@ -40,6 +40,12 @@ const UserMenu: React.FC<UserMenuProps> = () => {
     rentModal.onOpen();
   }, [loginModal, rentModal, session?.user]);
 
+  const handleSignOut =async () => {
+    await signOut();
+    //redirect back to fronend
+    window.location.href = 'http://localhost:3000';
+  }
+
   return ( 
     <div className="relative">
       <div className="flex flex-row items-center gap-3">
@@ -125,7 +131,7 @@ const UserMenu: React.FC<UserMenuProps> = () => {
                 <hr />
                 <MenuItem 
                   label="Logout" 
-                  onClick={() => signOut()}
+                  onClick={() => handleSignOut()}
                 />
               </>
             ) : (

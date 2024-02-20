@@ -2,19 +2,22 @@ import { AuthOptions, type DefaultSession } from "next-auth";
 import GoogleProvider from "next-auth/providers/google";
 import GitHubProvider from "next-auth/providers/github";
 import CredentialsProvider from "next-auth/providers/credentials";
-import { PrismaAdapter } from "@next-auth/prisma-adapter";
-import prisma from "@/libs/prismadb"
 
 export const authOptions: AuthOptions = {
-  adapter: PrismaAdapter(prisma),
   providers: [
     GitHubProvider({
       clientId: process.env.GITHUB_CLIENT_ID!,
       clientSecret: process.env.GITHUB_CLIENT_SECRET!,
+      httpOptions: {
+        timeout: 10000, // wait for response time, because the local environment often login timeout, so change this configuration
+      }
     }),
     GoogleProvider({
       clientId: process.env.GOOGLE_CLIENT_ID!,
       clientSecret: process.env.GOOGLE_CLIENT_SECRET!,
+      httpOptions: {
+        timeout: 10000, // wait for response time, because the local environment often login timeout, so change this configuration
+      }
     }),
     CredentialsProvider({
       name: "Credentials",
@@ -46,6 +49,16 @@ export const authOptions: AuthOptions = {
   debug: process.env.NODE_ENV !== "development",
   secret: process.env.NEXTAUTH_SECRET,
   callbacks: {
+    async redirect({ url, baseUrl }) {
+      if (url.startsWith('/api/auth/signout')) {
+        console.log(
+          "Signout redirect initiated. Will go to URL:",
+          url
+        );
+        return baseUrl; // Redirect to base of frontend ('http://localhost:3000')
+      }
+      return baseUrl;
+    },
     async jwt({ token, user, account, profile, isNewUser }) {
         if (user) {
           token.id = user.id;

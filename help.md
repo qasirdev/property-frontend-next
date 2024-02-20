@@ -59,6 +59,10 @@ docker system prune -a
 ### Remove node_-_modules
 - `sudo rm -r node_modules`
 
+### To use next-auth with remote REST API
+https://github.com/nextauthjs/next-auth/issues/7538
+https://blog.stackademic.com/explore-full-stack-magic-next-js-prisma-next-auth-vercel-postgres-951a9511702f
+
 <!--
 https://www.youtube.com/watch?v=c_-b_isI4vg&t=249s
 https://github.com/AntonioErdeljac/next13-airbnb-clone
